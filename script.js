@@ -66,7 +66,7 @@ const renderCountry = function (data) {
         </article>
         `;
    countriesContainer.insertAdjacentHTML('beforeend', html);
-   countriesContainer.style.opacity = 1;
+   // countriesContainer.style.opacity = 1;
    // console.log(data.flags.png);
 }
 
@@ -192,10 +192,45 @@ console.log(request);
 ///////////////////////////////////////  Chanining  Promises    /////////////////////////////////////// 
 
 
+// const getCountryData = function (country) {
+//    //country 1 
+//    fetch(`https://restcountries.com/v3.1/name/${country}`)
+//       .then((response) => response.json() // then method always return  a promise , no matter if we acturally return anything or not 
+//          // but if we don return value , then that value will became the fulfillment value of the return promise 
+//       ).then(data => {
+//          renderCountry(data[0]);
+//          const neighbor = data[0].borders[0]
+
+//          if (!neighbor) return;
+//          // country 2 
+//          return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`)
+//       })
+//       .then(response => response.json())
+//       .then(data => renderCountry(data, 'neighbor'));
+// };
+
+
+// btn.addEventListener('click', function () {
+
+//    getCountryData('india');
+
+// })
+
+
+///////////////////////////////////////  Handling Rejected   Promises    ///////////////////////////////////////
+
+//  the only way in which the fetch promise rejects  is when  the user looses its internet connection 
+const renderError = function (msg) {
+   countriesContainer.insertAdjacentText("beforeend", msg);
+
+   // countriesContainer.style.opacity = 1;
+}
+
+
 const getCountryData = function (country) {
    //country 1 
    fetch(`https://restcountries.com/v3.1/name/${country}`)
-      .then((response) => response.json()  // then method always return  a promise , no matter if we acturally return anything or not 
+      .then((response) => response.json() // then method always return  a promise , no matter if we acturally return anything or not 
          // but if we don return value , then that value will became the fulfillment value of the return promise 
       ).then(data => {
          renderCountry(data[0]);
@@ -206,11 +241,27 @@ const getCountryData = function (country) {
          return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`)
       })
       .then(response => response.json())
-      .then(data => renderCountry(data, 'neighbor'));
+      .then(data => renderCountry(data, 'neighbor'))
+      .catch(err => {
+         console.error(`${err} 🔥🔥`);
+         renderError(`something went wrong 🔥🔥 ${err.message}. Try Again!`);
+      })
+
+
+      // we use this method  for something that always needs to happen no matter the result of the promises 
+      .finally(() => {
+         countriesContainer.style.opacity = 1;
+
+
+      })
+
 };
 
 
+btn.addEventListener('click', function () {
 
-getCountryData('india')
+   getCountryData('india');
 
-///////////////////////////////////////  Handling Rejected   Promises    /////////////////////////////////////// 
+})
+
+
