@@ -150,3 +150,50 @@ const renderCountry = function (data) {
 const request = fetch('https://restcountries.com/v3.1/name/india');
 
 console.log(request);
+
+
+///////////////////////////////////////  Consuming Promises    /////////////////////////////////////// 
+
+
+// const getCountryData = function (country) {
+//    fetch(`https://restcountries.com/v3.1/name/${country}`)
+//       .then(function (response) {
+//          console.log(response)
+//          return response.json();//with  json method  we can read the data body 
+
+//          // response.json will be the new promise, so we need to handle that promise as well . so 
+//          // the way we do that is to call another then method .then(function(data){console.log(data);})
+
+//       }).then(function (data) {
+//          console.log(data);
+
+//          renderCountry(data[0]);
+
+//       })
+//    // to handle the fulfilled state we use 'then'  method that is available on all Promises 
+//    // we need to pass a callback function that we want ot executed  as soon as the promise is actually fulfilled 
+
+
+
+// };
+
+
+// const getCountryData = function (country) {
+//    fetch(`https://restcountries.com/v3.1/name/${country}`)
+//       .then((response) => response.json()//with  json method  we can read the data body 
+//          // response.json will be the new promise, so we need to handle that promise as well . so 
+//          // the way we do that is to call another then method .then(function(data){console.log(data);})
+//       ).then(data => renderCountry(data[0]));
+// }
+
+// getCountryData('india')
+
+
+const getCountryData = function (country) {
+   fetch(`https://restcountries.com/v3.1/name/${country}`)
+      .then((response) => response.json()
+      ).then(data => renderCountry(data[0]))
+
+}
+
+getCountryData('india')
