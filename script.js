@@ -212,3 +212,5 @@ const getCountryData = function (country) {
 
 
 getCountryData('india')
+
+///////////////////////////////////////  Handling Rejected   Promises    /////////////////////////////////////// 
