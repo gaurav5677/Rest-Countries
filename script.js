@@ -189,11 +189,26 @@ console.log(request);
 // getCountryData('india')
 
 
-const getCountryData = function (country) {
-   fetch(`https://restcountries.com/v3.1/name/${country}`)
-      .then((response) => response.json()
-      ).then(data => renderCountry(data[0]))
+///////////////////////////////////////  Chanining  Promises    /////////////////////////////////////// 
 
-}
+
+const getCountryData = function (country) {
+   //country 1 
+   fetch(`https://restcountries.com/v3.1/name/${country}`)
+      .then((response) => response.json()  // then method always return  a promise , no matter if we acturally return anything or not 
+         // but if we don return value , then that value will became the fulfillment value of the return promise 
+      ).then(data => {
+         renderCountry(data[0]);
+         const neighbor = data[0].borders[0]
+
+         if (!neighbor) return;
+         // country 2 
+         return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`)
+      })
+      .then(response => response.json())
+      .then(data => renderCountry(data, 'neighbor'));
+};
+
+
 
 getCountryData('india')
