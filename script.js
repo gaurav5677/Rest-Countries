@@ -148,4 +148,5 @@ const renderCountry = function (data) {
 //    request.send();
 
 const request = fetch('https://restcountries.com/v3.1/name/india');
+
 console.log(request);
