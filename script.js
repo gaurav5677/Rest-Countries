@@ -291,7 +291,7 @@ const wehereAmI = async function (country) {
    const { latitude: lat, longitude: lng } = pos.coords;
 
    // Reverse geocoding  
-   const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit   =json`);
+   const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit   / =json`);
    const dataGeo = await resGeo.json();
    console.log(dataGeo);
    // const { } = await getPosition();
