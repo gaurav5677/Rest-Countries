@@ -66,7 +66,7 @@ const renderCountry = function (data) {
         </article>
         `;
    countriesContainer.insertAdjacentHTML('beforeend', html);
-   // countriesContainer.style.opacity = 1;
+   countriesContainer.style.opacity = 1;
    // console.log(data.flags.png);
 }
 
@@ -147,9 +147,9 @@ const renderCountry = function (data) {
 //    request.open('GET', `https://restcountries.com/v3.1/name/${country}`);
 //    request.send();
 
-const request = fetch('https://restcountries.com/v3.1/name/india');
+// const request = fetch('https://restcountries.com/v3.1/name/india');
 
-console.log(request);
+// console.log(request);
 
 
 ///////////////////////////////////////  Consuming Promises    /////////////////////////////////////// 
@@ -220,48 +220,89 @@ console.log(request);
 ///////////////////////////////////////  Handling Rejected   Promises    ///////////////////////////////////////
 
 //  the only way in which the fetch promise rejects  is when  the user looses its internet connection 
-const renderError = function (msg) {
-   countriesContainer.insertAdjacentText("beforeend", msg);
+// const renderError = function (msg) {
+//    countriesContainer.insertAdjacentText("beforeend", msg);
 
-   // countriesContainer.style.opacity = 1;
+//    // countriesContainer.style.opacity = 1;
+// }
+
+
+// const getCountryData = function (country) {
+//    //country 1 
+//    fetch(`https://restcountries.com/v3.1/name/${country}`)
+//       .then((response) => response.json() // then method always return  a promise , no matter if we acturally return anything or not 
+//          // but if we don return value , then that value will became the fulfillment value of the return promise 
+//       ).then(data => {
+//          renderCountry(data[0]);
+//          const neighbor = data[0].borders[0]
+
+//          if (!neighbor) return;
+//          // country 2 
+//          return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`)
+//       })
+//       .then(response => response.json())
+//       .then(data => renderCountry(data, 'neighbor'))
+//       .catch(err => {
+//          console.error(`${err} 🔥🔥`);
+//          renderError(`something went wrong 🔥🔥 ${err.message}. Try Again!`);
+//       })
+
+
+//       // we use this method  for something that always needs to happen no matter the result of the promises 
+//       .finally(() => {
+//          countriesContainer.style.opacity = 1;
+
+
+//       })
+
+// };
+
+
+// btn.addEventListener('click', function () {
+
+//    getCountryData('india');
+
+// })
+
+
+
+//since ES2017 there is now an even better and easier way to consume promises which is called async and await 
+///////////////////////////////////////  Consuming Promises with Async  / Await    ///////////////////////////////////////
+
+// so now this function is asynchronous function 
+// // will basically keep running in the background 
+// const wehereAmI = async function (country) {
+
+// }
+
+const getPosition = function () {
+   return new Promise(function (resolve, reject) {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+   })
 }
 
+const wehereAmI = async function (country) {
+   // we use the await keyword to basically await for  the result of this  promises
+   // Isn't  stopping the Code  Blocking the Execution ? 
+   //  ans no  bua , stopping execution in an async function , the asunchronous function Run Ascynchrouslly in background
+   // not blocking the main threat of  exection , not blocking the call stack 
 
-const getCountryData = function (country) {
-   //country 1 
-   fetch(`https://restcountries.com/v3.1/name/${country}`)
-      .then((response) => response.json() // then method always return  a promise , no matter if we acturally return anything or not 
-         // but if we don return value , then that value will became the fulfillment value of the return promise 
-      ).then(data => {
-         renderCountry(data[0]);
-         const neighbor = data[0].borders[0]
+   const pos = await getPosition();
+   const { latitude: lat, longitude: lng } = pos.coords;
 
-         if (!neighbor) return;
-         // country 2 
-         return fetch(`https://restcountries.com/v3.1/alpha/${neighbor}`)
-      })
-      .then(response => response.json())
-      .then(data => renderCountry(data, 'neighbor'))
-      .catch(err => {
-         console.error(`${err} 🔥🔥`);
-         renderError(`something went wrong 🔥🔥 ${err.message}. Try Again!`);
-      })
+   // Reverse geocoding  
+   const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit   =json`);
+   const dataGeo = await resGeo.json();
+   console.log(dataGeo);
+   // const { } = await getPosition();
 
 
-      // we use this method  for something that always needs to happen no matter the result of the promises 
-      .finally(() => {
-         countriesContainer.style.opacity = 1;
+   const res = await fetch(`https://restcountries.com/v3.1/name/${country}`)
+   const data = await res.json();
+   console.log(data);
 
+   renderCountry(data[0]);
 
-      })
-
-};
-
-
-btn.addEventListener('click', function () {
-
-   getCountryData('india');
-
-})
-
-
+}
+wehereAmI('india');
+console.log('first');
